@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Location Logger</title>
+  <script src="https://www.gstatic.com/firebasejs/9.21.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.21.0/firebase-database.js"></script>
+</head>
+<body>
+  <h1>Location Logger</h1>
+  <p>Click the button to share your location.</p>
+  <button id="getLocation">Share My Location</button>
+  <p id="output"></p>
+
+  <script>
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+      databaseURL: "https://YOUR_PROJECT_ID.firebaseio.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT_ID.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // Function to log location
+    document.getElementById("getLocation").addEventListener("click", () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+
+            // Display location to the user
+            document.getElementById("output").textContent =
+              `Latitude: ${latitude}, Longitude: ${longitude}`;
+
+            // Save location to Firebase
+            const timestamp = new Date().toISOString();
+            firebase.database().ref('locations').push({
+              latitude,
+              longitude,
+              timestamp
+            }).then(() => {
+              console.log("Location logged successfully.");
+            }).catch((error) => {
+              console.error("Error logging location:", error);
+            });
+          },
+          (error) => {
+            document.getElementById("output").textContent = "Unable to retrieve location.";
+            console.error(error);
+          }
+        );
+      } else {
+        document.getElementById("output").textContent =
+          "Geolocation is not supported by this browser.";
+      }
+    });
+  </script>
+</body>
+</html>
