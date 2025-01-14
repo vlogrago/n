@@ -1,86 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Location Collector</title>
-</head>
-<body>
-  <h1>Location Permission Test</h1>
-  <p>Click the button below to share your location. After you receive your coordinates, please enter them in the form below to verify you're not a robot.</p>
-  
-  <button id="getLocation">Share My Location</button>
-  
-  <p id="output"></p>
+<form action="https://formspree.io/f/meoonybk" method="POST">
+  <label for="latitude">Latitude:</label>
+  <input type="text" id="latitude" name="latitude" required><br><br>
 
-  <h2>Location Verification Form</h2>
-  <form id="locationForm">
-    <label for="latitude">Latitude:</label>
-    <input type="text" id="latitude" name="latitude" required><br><br>
-    
-    <label for="longitude">Longitude:</label>
-    <input type="text" id="longitude" name="longitude" required><br><br>
-    
-    <label for="accuracy">Accuracy (meters):</label>
-    <input type="text" id="accuracy" name="accuracy" required><br><br>
-    
-    <button type="submit">Submit</button>
-  </form>
+  <label for="longitude">Longitude:</label>
+  <input type="text" id="longitude" name="longitude" required><br><br>
 
-  <script>
-    document.getElementById("getLocation").addEventListener("click", () => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const latitude = position.coords.latitude;
-            const longitude = position.coords.longitude;
-            const accuracy = position.coords.accuracy;
+  <label for="accuracy">Accuracy (meters):</label>
+  <input type="text" id="accuracy" name="accuracy" required><br><br>
 
-            // Display the location
-            document.getElementById("output").textContent =
-              `Latitude: ${latitude}, Longitude: ${longitude}, Accuracy: ${accuracy} meters`;
-
-            // Automatically fill in the form with the retrieved location
-            document.getElementById("latitude").value = latitude;
-            document.getElementById("longitude").value = longitude;
-            document.getElementById("accuracy").value = accuracy;
-          },
-          (error) => {
-            let message = '';
-            switch (error.code) {
-              case error.PERMISSION_DENIED:
-                message = "Permission denied.";
-                break;
-              case error.POSITION_UNAVAILABLE:
-                message = "Location unavailable.";
-                break;
-              case error.TIMEOUT:
-                message = "Request timeout.";
-                break;
-              default:
-                message = "An unknown error occurred.";
-            }
-            document.getElementById("output").textContent = message;
-          }
-        );
-      } else {
-        document.getElementById("output").textContent =
-          "Geolocation is not supported by this browser.";
-      }
-    });
-
-    // Handle form submission (you can modify this to save data to a server)
-    document.getElementById("locationForm").addEventListener("submit", (event) => {
-      event.preventDefault(); // Prevent form from submitting normally
-
-      const latitude = document.getElementById("latitude").value;
-      const longitude = document.getElementById("longitude").value;
-      const accuracy = document.getElementById("accuracy").value;
-
-      alert(`Form submitted with Latitude: ${latitude}, Longitude: ${longitude}, Accuracy: ${accuracy} meters`);
-      
-      // You can send the data to a server here if needed
-    });
-  </script>
-</body>
-</html>
+  <button type="submit">Submit</button>
+</form>
